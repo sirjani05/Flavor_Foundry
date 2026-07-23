@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}FlavorFoundry Market | Fresh Grocery eCommerce{% endblock %}</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-green: #10b981;
+            --primary-dark: #059669;
+            --emerald-bg: #ecfdf5;
+            --accent-orange: #f59e0b;
+            --dark-heading: #0f172a;
+            --body-text: #334155;
+            --card-border: #f1f5f9;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--body-text);
+            background-color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        .brand-font {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            color: var(--dark-heading);
+        }
+
+        /* Navbar Styling */
+        .navbar-custom {
+            background-color: #ffffff;
+            box-shadow: 0 4px 20px -2px rgba(16, 185, 129, 0.08);
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0.8rem 0;
+        }
+
+        .brand-logo {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-logo i {
+            font-size: 1.8rem;
+            color: var(--primary-green);
+        }
+
+        .search-box {
+            background-color: #f1f5f9;
+            border-radius: 50px;
+            padding: 0.25rem 0.5rem;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus-within {
+            background-color: #ffffff;
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            box-shadow: none !important;
+        }
+
+        .btn-green {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            font-weight: 600;
+            border-radius: 50px;
+            padding: 0.5rem 1.4rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-green:hover {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #047857 100%);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .cart-badge-btn {
+            position: relative;
+            background-color: var(--emerald-bg);
+            color: var(--primary-dark);
+            border-radius: 50px;
+            font-weight: 600;
+            padding: 0.5rem 1.2rem;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .cart-badge-btn:hover {
+            background-color: var(--primary-green);
+            color: white;
+        }
+
+        .cart-count {
+            background-color: #ef4444;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 50px;
+            padding: 0.15rem 0.55rem;
+            margin-left: 0.4rem;
+        }
+
+        /* Product Cards */
+        .product-card {
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid var(--card-border);
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .product-img-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 75%;
+            /* 4:3 Aspect Ratio */
+            overflow: hidden;
+            background-color: #f8fafc;
+        }
+
+        .product-img-wrapper img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover .product-img-wrapper img {
+            transform: scale(1.06);
+        }
+
+        .stock-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.3rem 0.7rem;
+            border-radius: 50px;
+            backdrop-filter: blur(8px);
+        }
+
+        .badge-in-stock {
+            background: rgba(16, 185, 129, 0.9);
+            color: white;
+        }
+
+        .badge-out-stock {
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+        }
+
+        .category-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            background-color: var(--emerald-bg);
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .price-tag {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--dark-heading);
+        }
+
+        /* Filter Sidebar */
+        .filter-sidebar {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
+        }
+
+        .filter-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-bottom: 2px solid var(--emerald-bg);
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: auto;
+            background-color: #0f172a;
+            color: #94a3b8;
+            padding: 4rem 0 2rem;
+        }
+
+        footer h5 {
+            color: #ffffff;
+            margin-bottom: 1.2rem;
+        }
+
+        footer a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        footer a:hover {
+            color: var(--primary-green);
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+    <!-- Navigation Header -->
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+        <div class="container">
+            <a class="brand-logo me-4" href="{% url 'home' %}">
+                <i class="bi bi-basket2-fill"></i>
+                <span>FlavorFoundry <span style="color: var(--primary-green);">Market</span></span>
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <!-- Combined Search Form -->
+                <form class="d-flex my-2 my-lg-0 me-auto flex-grow-1 mx-lg-4" method="GET" action="{% url 'home' %}">
+                    <div class="input-group search-box w-100">
+                        <span class="input-group-text bg-transparent border-0 text-muted ps-3"><i
+                                class="bi bi-search"></i></span>
+                        <input class="form-control" type="search" name="q" value="{{ q }}"
+                            placeholder="Search fresh groceries, fruits, vegetables..." aria-label="Search">
+                        {% if selected_category_slug %}
+                        <input type="hidden" name="category" value="{{ selected_category_slug }}">
+                        {% endif %}
+                        {% if min_price %}
+                        <input type="hidden" name="min_price" value="{{ min_price }}">
+                        {% endif %}
+                        {% if max_price %}
+                        <input type="hidden" name="max_price" value="{{ max_price }}">
+                        {% endif %}
+                        <button class="btn btn-green rounded-pill px-4 ms-1" type="submit">Search</button>
+                    </div>
+                </form>
+
+                <!-- Action Links & Cart -->
+                <div class="d-flex align-items-center gap-3">
+                    <a href="{% url 'cart_detail' %}"
+                        class="cart-badge-btn text-decoration-none d-flex align-items-center">
+                        <i class="bi bi-cart3 me-1 fs-5"></i>
+                        <span class="d-none d-sm-inline me-1">Cart</span>
+                        <span class="cart-count">{{ cart_total_items }}</span>
+                    </a>
+
+                    {% if user.is_staff or user.is_superuser %}
+                        <a href="{% url 'manage_products' %}" class="btn btn-warning rounded-pill px-3 fw-bold text-dark d-none d-md-flex align-items-center gap-1 shadow-sm">
+                            <i class="bi bi-speedometer2"></i> Manage Store
+                        </a>
+                    {% endif %}
+
+                    {% if user.is_authenticated %}
+                    <div class="dropdown">
+                        <button
+                            class="btn btn-outline-secondary rounded-pill dropdown-toggle d-flex align-items-center gap-2 fw-semibold px-3"
+                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle fs-5 text-success"></i>
+                            <span>{{ user.first_name|default:user.username }}</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3 mt-2">
+                            <li><a class="dropdown-item py-2" href="{% url 'profile' %}"><i
+                                        class="bi bi-person me-2"></i>My Profile</a></li>
+                            <li><a class="dropdown-item py-2" href="{% url 'cart_detail' %}"><i
+                                        class="bi bi-bag-check me-2"></i>My Cart</a></li>
+                            {% if user.is_staff or user.is_superuser %}
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item py-2 fw-bold text-success" href="{% url 'manage_products' %}"><i
+                                        class="bi bi-speedometer2 me-2"></i>Store Dashboard</a></li>
+                            <li><a class="dropdown-item py-2 text-primary" href="/admin/" target="_blank"><i
+                                        class="bi bi-gear me-2"></i>Django Admin</a></li>
+                            {% endif %}
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item py-2 text-danger" href="{% url 'logout' %}"><i
+                                        class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                    {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-outline-success rounded-pill px-3 fw-semibold">Log In</a>
+                    <a href="{% url 'signup' %}" class="btn btn-green rounded-pill px-3">Sign Up</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Notification Messages -->
+    <div class="container mt-3">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show rounded-3 shadow-sm border-0"
+            role="alert">
+            {% if message.tags == 'success' %}<i class="bi bi-check-circle-fill me-2 fs-5"></i>{% endif %}
+            {% if message.tags == 'error' %}<i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>{% endif %}
+            {% if message.tags == 'info' %}<i class="bi bi-info-circle-fill me-2 fs-5"></i>{% endif %}
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+    <!-- Main Content Container -->
+    <main class="py-4">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="brand-logo mb-3 text-white">
+                        <i class="bi bi-basket2-fill text-success"></i>
+                        <span>FlavorFoundry <span class="text-success">Market</span></span>
+                    </div>
+                    <p class="small">Delivering fresh, organic, and high-quality groceries directly to your doorstep.
+                        Experience premium online grocery shopping with real-time stock availability and swift home
+                        delivery.</p>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled d-flex flex-column gap-2 small">
+                        <li><a href="{% url 'home' %}">Home Catalog</a></li>
+                        <li><a href="{% url 'cart_detail' %}">Shopping Cart</a></li>
+                        <li><a href="{% url 'signup' %}">Register Account</a></li>
+                        <li><a href="/admin/" target="_blank">Store Admin</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5>Fresh Categories</h5>
+                    <ul class="list-unstyled d-flex flex-column gap-2 small">
+                        <li><a href="{% url 'home' %}?category=fresh-vegetables">Fresh Vegetables</a></li>
+                        <li><a href="{% url 'home' %}?category=fresh-fruits">Fresh Fruits</a></li>
+                        <li><a href="{% url 'home' %}?category=dairy-eggs">Dairy & Eggs</a></li>
+                        <li><a href="{% url 'home' %}?category=bakery-bread">Bakery & Bread</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5>Customer Care</h5>
+                    <p class="small mb-1"><i class="bi bi-geo-alt me-2 text-success"></i>100 Fresh Market Way, Organic
+                        Valley</p>
+                    <p class="small mb-1"><i class="bi bi-telephone me-2 text-success"></i>+1 (800) 555-GROCERY</p>
+                    <p class="small"><i class="bi bi-envelope me-2 text-success"></i>support@flavorfoundrymarket.com</p>
+                </div>
+            </div>
+            <hr class="border-secondary my-4">
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center small">
+                <p class="mb-0">&copy; 2026 FlavorFoundry Market.</p>
+                <div class="d-flex gap-3 fs-5 mt-2 mt-sm-0 text-secondary">
+                    <i class="bi bi-credit-card"></i>
+                    <i class="bi bi-shield-check"></i>
+                    <i class="bi bi-truck"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

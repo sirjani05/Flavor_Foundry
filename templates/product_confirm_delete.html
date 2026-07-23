@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirm Delete Product | FlavorFoundry Market{% endblock %}
+
+{% block content %}
+<div class="container py-5 text-center">
+    <div class="bg-white rounded-4 border p-5 shadow-sm mx-auto" style="max-width: 550px;">
+        <div class="mb-3 text-danger">
+            <i class="bi bi-exclamation-octagon display-2"></i>
+        </div>
+        <h3 class="fw-bold mb-3">Delete Product?</h3>
+        <p class="text-secondary mb-4">Are you sure you want to delete <strong class="text-dark">{{ product.name }}</strong>? This action cannot be undone.</p>
+
+        <div class="p-3 bg-light rounded-3 border d-flex align-items-center gap-3 text-start mb-4">
+            <img src="{{ product.get_image_url }}" alt="{{ product.name }}" class="rounded-3 border object-fit-cover" style="width: 60px; height: 60px;">
+            <div>
+                <h6 class="mb-0 fw-bold">{{ product.name }}</h6>
+                <span class="small text-muted">{{ product.category.name }} &bull; ${{ product.price }}</span>
+            </div>
+        </div>
+
+        <form method="POST" class="d-flex justify-content-center gap-3">
+            {% csrf_token %}
+            <a href="{% url 'manage_products' %}" class="btn btn-outline-secondary btn-lg rounded-pill px-4">Cancel</a>
+            <button type="submit" class="btn btn-danger btn-lg rounded-pill px-5 fw-bold shadow">
+                <i class="bi bi-trash me-1"></i> Yes, Delete Product
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

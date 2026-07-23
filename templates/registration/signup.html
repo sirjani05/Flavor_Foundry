@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign Up | FlavorFoundry Market{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
+            <div class="bg-white rounded-4 border p-4 p-sm-5 shadow-sm">
+                <div class="text-center mb-4">
+                    <div class="brand-logo justify-content-center mb-2">
+                        <i class="bi bi-basket2-fill text-success fs-2"></i>
+                    </div>
+                    <h3 class="fw-bold">Create an Account</h3>
+                    <p class="text-muted small">Sign up to enjoy fast checkout and personalized grocery tracking</p>
+                </div>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <div class="form-text small">{{ field.help_text }}</div>
+                            {% endif %}
+                            {% for error in field.errors %}
+                                <div class="text-danger small mt-1"><i class="bi bi-exclamation-circle me-1"></i>{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+
+                    <button type="submit" class="btn btn-green btn-lg w-100 rounded-pill fw-bold shadow-sm mt-3 mb-3">Create Account</button>
+                </form>
+
+                <div class="text-center pt-3 border-top small text-muted">
+                    Already have an account? <a href="{% url 'login' %}" class="text-success fw-bold text-decoration-none">Log In Here</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block title %}My Cart | FlavorFoundry Market{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="fw-bold mb-4"><i class="bi bi-cart3 text-success me-2"></i>Shopping Cart Summary</h2>
+
+    {% if cart %}
+        <div class="row g-4">
+            <!-- Cart Items Table -->
+            <div class="col-lg-8">
+                <div class="bg-white rounded-4 border p-4 shadow-sm">
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col" style="min-width: 250px;">Product</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col" style="min-width: 140px;">Quantity</th>
+                                    <th scope="col">Total</th>
+                                    <th scope="col" class="text-end">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in cart %}
+                                    {% with product=item.product %}
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <img src="{{ product.get_image_url }}" alt="{{ product.name }}" class="rounded-3 border object-fit-cover" style="width: 60px; height: 60px;">
+                                                    <div>
+                                                        <h6 class="mb-0 fw-bold">
+                                                            <a href="{% url 'product_detail' product.slug %}" class="text-dark text-decoration-none hover-primary">
+                                                                {{ product.name }}
+                                                            </a>
+                                                        </h6>
+                                                        <span class="small text-muted">{{ product.unit }}</span>
+                                                        <div class="small text-success">In Stock: {{ product.stock_quantity }}</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="fw-bold text-dark">${{ item.price }}</td>
+                                            <td>
+                                                <form method="POST" action="{% url 'cart_update' product.id %}" class="d-flex align-items-center gap-1">
+                                                    {% csrf_token %}
+                                                    <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="{{ product.stock_quantity }}" class="form-control form-control-sm text-center fw-bold rounded-2" style="width: 70px;" onchange="this.form.submit()">
+                                                    <button type="submit" class="btn btn-sm btn-outline-secondary py-1 px-2" title="Update Quantity">
+                                                        <i class="bi bi-arrow-repeat"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                            <td class="fw-bold text-success fs-6">${{ item.total_price }}</td>
+                                            <td class="text-end">
+                                                <a href="{% url 'cart_remove' product.id %}" class="btn btn-sm btn-outline-danger rounded-circle p-0 d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" title="Remove Item">
+                                                    <i class="bi bi-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endwith %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                        <a href="{% url 'home' %}" class="btn btn-outline-secondary rounded-pill px-4">
+                            <i class="bi bi-arrow-left me-2"></i>Continue Shopping
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary Card -->
+            <div class="col-lg-4">
+                <div class="bg-white rounded-4 border p-4 shadow-sm sticky-top" style="top: 90px;">
+                    <h4 class="fw-bold mb-4 border-bottom pb-3">Order Summary</h4>
+                    
+                    <div class="d-flex justify-content-between mb-3 fs-6">
+                        <span class="text-muted">Subtotal ({{ cart_total_items }} items)</span>
+                        <span class="fw-bold text-dark">${{ cart_total_price }}</span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-3 fs-6">
+                        <span class="text-muted">Delivery Fee</span>
+                        <span class="fw-bold text-success">FREE</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-4 fs-6">
+                        <span class="text-muted">Estimated Tax</span>
+                        <span class="fw-bold text-dark">$0.00</span>
+                    </div>
+
+                    <hr class="my-3">
+
+                    <div class="d-flex justify-content-between mb-4">
+                        <span class="fs-5 fw-bold text-dark">Grand Total</span>
+                        <span class="fs-4 fw-extrabold text-success">${{ cart_total_price }}</span>
+                    </div>
+
+                    <a href="{% url 'checkout' %}" class="btn btn-green btn-lg w-100 rounded-pill fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2">
+                        Proceed to Checkout <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                    <div class="mt-4 p-3 bg-light rounded-3 text-center small text-muted">
+                        <i class="bi bi-shield-check text-success fs-5 me-1"></i>
+                        Encrypted 256-bit Secure Checkout
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="bg-white rounded-4 border p-5 text-center shadow-sm my-4">
+            <i class="bi bi-cart-x display-1 text-muted opacity-50"></i>
+            <h3 class="mt-4 fw-bold">Your Cart is Currently Empty</h3>
+            <p class="text-muted mb-4">Looks like you haven't added any fresh groceries to your cart yet.</p>
+            <a href="{% url 'home' %}" class="btn btn-green btn-lg rounded-pill px-5">Explore Fresh Groceries</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
