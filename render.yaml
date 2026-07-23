@@ -3,7 +3,7 @@ services:
     name: flavorfoundry
     runtime: python
     buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate
-    startCommand: gunicorn flavorfoundry.wsgi:application
+    startCommand: gunicorn flavorfoundry.wsgi:application --bind 0.0.0.0:$PORT
     envVars:
       - key: SECRET_KEY
         generateValue: true
